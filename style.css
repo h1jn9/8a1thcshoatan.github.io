@@ -1,0 +1,206 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  height: 100vh;
+  color: white;
+  overflow: hidden;
+}
+
+/* VIDEO NỀN */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* ÁNH NẮNG */
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at top, rgba(255,255,150,0.6), transparent 60%);
+  transform: translate(-25%, -50%);
+  z-index: -1;
+}
+
+/* HERO */
+.hero {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 120px;
+}
+
+/* TEXT */
+.content {
+  max-width: 650px;
+}
+
+.tag {
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+.title {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.sun {
+  color: #ffd700;
+  text-shadow: 0 0 20px #ffd700;
+}
+
+.green {
+  background: linear-gradient(45deg,#00ff88,#66ff00);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.desc {
+  margin-top: 25px;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* GLASS */
+.glass {
+  width: 520px;
+  height: 300px;
+
+  background: rgba(255,255,255,0.15);
+  border-radius: 25px;
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255,255,255,0.3);
+
+  box-shadow:
+    0 0 40px rgba(255,255,150,0.5),
+    inset 0 0 20px rgba(255,255,255,0.2);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.glass:hover {
+  transform: scale(1.05);
+}
+
+/* PLAY */
+.play {
+  font-size: 60px;
+  color: #00ff88;
+}
+
+/* POPUP */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0,0,0,0.85);
+  z-index: 999;
+}
+
+/* khung video */
+.popup-content {
+  width: 80vw;          /* 80% chiều ngang màn hình */
+  aspect-ratio: 16/9;   /* giữ tỷ lệ 16:9 */
+  max-width: 1000px;
+  position: relative;
+}
+
+.popup video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/* nút X */
+.close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  font-size: 30px;
+  cursor: pointer;
+}
+.logo-box {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  z-index: 1000;
+}
+
+.logo-icon {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(45deg,#00ff88,#00ccff);
+  border-radius: 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: bold;
+  color: black;
+}
+
+.logo-text {
+  font-weight: 600;
+  font-size: 20px;
+  color: white;
+}
+
+/* chữ góc trái trên */
+.video-note {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  font-style: italic;
+}
+
+/* chữ góc phải dưới */
+.video-info {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+
+  font-size: 12px;
+  color: white;
+
+  background: rgba(255,255,255,0.1);
+  padding: 5px 10px;
+  border-radius: 10px;
+
+  backdrop-filter: blur(10px);
+}
