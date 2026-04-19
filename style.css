@@ -1,0 +1,215 @@
+/* ===== BASE ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  color: white;
+  overflow-x: hidden; /* 👈 fix tràn ngang */
+}
+
+/* VIDEO NỀN */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* ÁNH SÁNG */
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at top, rgba(255,255,150,0.5), transparent 60%);
+  transform: translate(-25%, -50%);
+  z-index: -1;
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 120px;
+  padding: 40px;
+}
+
+/* TEXT */
+.content {
+  max-width: 650px;
+}
+
+.tag {
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+.title {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.sun {
+  color: #ffd700;
+  text-shadow: 0 0 20px #ffd700;
+}
+
+.green {
+  background: linear-gradient(45deg,#00ff88,#66ff00);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.desc {
+  margin-top: 25px;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* GLASS */
+.glass {
+  width: 520px;
+  height: 300px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 25px;
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255,255,255,0.3);
+
+  box-shadow:
+    0 0 40px rgba(255,255,150,0.4),
+    inset 0 0 20px rgba(255,255,255,0.2);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.glass:hover {
+  transform: scale(1.05);
+}
+
+/* PLAY */
+.play {
+  font-size: 60px;
+  color: #00ff88;
+}
+
+/* LOGO */
+.logo-box {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.logo-icon {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(45deg,#00ff88,#00ccff);
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: black;
+}
+
+.logo-text {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* TEXT TRÊN VIDEO */
+.video-note {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  font-style: italic;
+}
+
+.video-info {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 12px;
+  color: white;
+  background: rgba(255,255,255,0.1);
+  padding: 5px 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+/* FOOTER */
+.footer{
+  position:fixed;
+  bottom:5px;
+  width:100%;
+  text-align:center;
+  font-size:10px;
+  letter-spacing:2px;
+  color:rgba(255,255,255,0.5);
+}
+
+.footer span{
+  color:#00e0ff;
+  letter-spacing:3px;
+}
+
+/* LINK */
+.video-link{
+  text-decoration:none;
+  position:relative;
+}
+
+/* ===== 📱 MOBILE FIX ===== */
+@media (max-width: 768px){
+
+  .hero{
+    flex-direction: column;  /* 👈 xếp dọc */
+    gap: 40px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .title{
+    font-size: 36px; /* 👈 nhỏ lại */
+  }
+
+  .desc{
+    font-size: 14px;
+  }
+
+  .glass{
+    width: 100%;
+    height: 220px;
+  }
+
+  .logo-box{
+    transform: scale(0.8);
+    top: 10px;
+    left: 10px;
+  }
+
+  .footer{
+    font-size: 9px;
+  }
+}
