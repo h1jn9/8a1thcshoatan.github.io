@@ -184,32 +184,72 @@ body::before {
 @media (max-width: 768px){
 
   .hero{
-    flex-direction: column;  /* 👈 xếp dọc */
-    gap: 40px;
-    padding: 20px;
+    flex-direction: column;
+    gap: 30px;
+    padding: 90px 20px 80px 20px;
     text-align: center;
+    justify-content: flex-start;
   }
 
   .title{
-    font-size: 36px; /* 👈 nhỏ lại */
+    font-size: 32px;
+    line-height: 1.1;
   }
 
   .desc{
     font-size: 14px;
+    margin-top: 15px;
+  }
+
+  .video-link {
+    width: 100%;
+    max-width: 450px;
+    display: block;
   }
 
   .glass{
     width: 100%;
-    height: 220px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
   }
 
-  .logo-box{
-    transform: scale(0.8);
-    top: 10px;
+  .video-note {
+    font-size: 10px;
+    top: 8px;
     left: 10px;
   }
 
+  .video-info {
+    font-size: 10px;
+    bottom: 8px;
+    right: 10px;
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
+
+  .play {
+    font-size: 40px;
+  }
+
+  .logo-box{
+    top: 15px;
+    left: 15px;
+  }
+
+  .logo-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 12px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+  }
+
   .footer{
-    font-size: 9px;
+    font-size: 8px;
+    padding: 0 10px;
+    bottom: 8px;
   }
 }
