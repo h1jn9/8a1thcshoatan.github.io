@@ -24,33 +24,262 @@ body{
   height:100vh;
   flex-direction:column;
   padding: 20px;
+  overflow: hidden;
 }
 
 /* title */
 h1{
   font-size:40px;
   text-align: center;
+  margin-bottom: 20px;
 }
 
-span{
+h1 span{
   color:#ff99cc;
   text-shadow:0 0 12px rgba(255,153,204,0.8);
 }
 
-/* video */
-.video-box{
-  margin-top:30px;
-  width:100%;
-  max-width:1000px;
-  aspect-ratio:16/9;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 0 40px rgba(255,153,204,0.5);
+/* video container */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 16/9;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  will-change: transform;
 }
 
-iframe{
-  width:100%;
-  height:100%;
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Loading Spinner */
+.loader {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #ff99cc;
+  border-radius: 50%;
+  display: none;
+  z-index: 15;
+  animation: spin 1s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* custom controls */
+.controls-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  will-change: opacity;
+  z-index: 20;
+}
+
+.video-container:hover .controls-overlay,
+.video-container.touch-active .controls-overlay {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.progress-area {
+  height: 8px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.buffered-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #ff99cc;
+  border-radius: 10px;
+  position: relative;
+  will-change: width;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255,153,204,0.8);
+  transition: transform 0.1s;
+}
+
+.progress-area:hover .progress-bar::after,
+.progress-area.dragging .progress-bar::after {
+  transform: translateY(-50%) scale(1.3);
+}
+
+/* Time Tooltip Helper */
+.time-tooltip {
+  position: absolute;
+  top: -35px;
+  transform: translateX(-50%);
+  background: #ff99cc;
+  color: #000;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  display: none;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 30;
+}
+
+.time-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #ff99cc;
+}
+
+.progress-area:hover .time-tooltip,
+.progress-area.dragging .time-tooltip {
+  display: block;
+}
+
+.control-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left-controls, .right-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+button:hover {
+  color: #ff99cc;
+}
+
+button svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.time-display {
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 100px;
+  color: rgba(255,255,255,0.9);
+}
+
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+input[type="range"] {
+  width: 80px;
+  accent-color: #ff99cc;
+  cursor: pointer;
+}
+
+/* Tap to Play Overlay */
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: opacity 0.3s;
+}
+
+.play-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.play-icon-big {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 153, 204, 0.1);
+  border: 2px solid #ff99cc;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff99cc;
+}
+
+.play-icon-big svg {
+  width: 40px;
+  height: 40px;
+  fill: currentColor;
+  margin-left: 5px;
 }
 
 /* back */
@@ -58,37 +287,30 @@ iframe{
   position:absolute;
   bottom:35px;
   left:20px;
-
   padding:8px 14px;
   border-radius:20px;
-
   color:#ff99cc;
   text-decoration:none;
   font-size:14px;
-
-  background:rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
+  background:rgba(255,255,255,0.1);
   border:1px solid rgba(255,255,255,0.2);
-
-  box-shadow:0 0 10px rgba(255,153,204,0.2);
-
   transition:0.3s;
+  z-index: 100;
 }
 .back:hover{
   text-shadow:0 0 10px #ff99cc;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* 🔥 FOOTER FIX */
 .footer{
-  position:fixed;       /* luôn dính đáy màn hình */
-  bottom:6px;           /* hạ xuống */
+  position:fixed;
+  bottom:6px;
   left:0;
   width:100%;
   text-align:center;
-
-  font-size:10px;       /* nhỏ lại */
+  font-size:10px;
   letter-spacing:1.5px;
-
   color:rgba(255,255,255,0.5);
 }
 
@@ -99,8 +321,9 @@ iframe{
 
 @media (max-width: 600px) {
   h1 { font-size: 28px; }
-  .video-box { margin-top: 20px; }
+  .video-container { border-radius: 10px; }
   .back { bottom: 30px; left: 50%; transform: translateX(-50%); }
+  .volume-container { display: none; }
 }
 </style>
 
@@ -110,13 +333,229 @@ iframe{
 
 <h1>Video <span>Thuyết Minh</span></h1>
 
-<div class="video-box">
-  <iframe 
-    src="https://youtu.be/0HNMTf4B6CQ?si=BRO_N35EJqHPpgeI"
-    frameborder="0"
-    allowfullscreen>
-  </iframe>
+<div class="video-container" id="videoContainer">
+  <video id="vid" playsinline>
+    <source src="https://files.catbox.moe/8zsx65.mkv" type="video/mp4">
+  </video>
+
+  <div class="loader" id="loader"></div>
+
+  <div class="play-overlay" id="playOverlay">
+    <div class="play-icon-big">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </div>
+  </div>
+
+  <div class="controls-overlay">
+    <div class="progress-area" id="progressArea">
+      <div class="time-tooltip" id="timeTooltip">00:00</div>
+      <div class="buffered-bar" id="bufferedBar"></div>
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="control-buttons">
+      <div class="left-controls">
+        <button id="playPauseBtn">
+          <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <div class="time-display">
+          <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
+        </div>
+      </div>
+      <div class="right-controls">
+        <div class="volume-container">
+          <button id="muteBtn">
+            <svg id="volumeIcon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            <svg id="muteIcon" viewBox="0 0 24 24" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+          </button>
+          <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+        </div>
+        <button id="fullscreenBtn">
+          <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+        
+<script>
+  const video = document.getElementById("vid");
+  const container = document.getElementById("videoContainer");
+  const loader = document.getElementById("loader");
+  const playOverlay = document.getElementById("playOverlay");
+  const playPauseBtn = document.getElementById("playPauseBtn");
+  const playIcon = document.getElementById("playIcon");
+  const pauseIcon = document.getElementById("pauseIcon");
+  const progressArea = document.getElementById("progressArea");
+  const progressBar = document.getElementById("progressBar");
+  const bufferedBar = document.getElementById("bufferedBar");
+  const timeTooltip = document.getElementById("timeTooltip");
+  const currentTimeEl = document.getElementById("currentTime");
+  const durationEl = document.getElementById("duration");
+  const muteBtn = document.getElementById("muteBtn");
+  const volumeIcon = document.getElementById("volumeIcon");
+  const muteIcon = document.getElementById("muteIcon");
+  const volumeSlider = document.getElementById("volumeSlider");
+  const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+  function formatTime(time) {
+    if (isNaN(time)) return "00:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  function togglePlay() {
+    if (video.paused) video.play();
+    else video.pause();
+  }
+
+  playOverlay.addEventListener("click", () => {
+    video.muted = false;
+    togglePlay();
+  });
+
+  playPauseBtn.addEventListener("click", togglePlay);
+
+  video.addEventListener("play", () => {
+    playIcon.style.display = "none";
+    pauseIcon.style.display = "block";
+    playOverlay.classList.add("hidden");
+  });
+
+  video.addEventListener("pause", () => {
+    playIcon.style.display = "block";
+    pauseIcon.style.display = "none";
+  });
+
+  // Loader Logic
+  video.addEventListener("waiting", () => loader.style.display = "block");
+  video.addEventListener("playing", () => loader.style.display = "none");
+  video.addEventListener("canplay", () => loader.style.display = "none");
+
+  // Buffered Logic
+  video.addEventListener("progress", () => {
+    if (video.duration > 0) {
+      for (let i = 0; i < video.buffered.length; i++) {
+        if (video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
+          const bufferedEnd = video.buffered.end(video.buffered.length - 1 - i);
+          const width = (bufferedEnd / video.duration) * 100;
+          bufferedBar.style.width = `${width}%`;
+          break;
+        }
+      }
+    }
+  });
+
+  let isDragging = false;
+
+  function handleMove(e) {
+    const rect = progressArea.getBoundingClientRect();
+    let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    let x = clientX - rect.left;
+    x = Math.max(0, Math.min(x, rect.width));
+    const percentage = (x / rect.width) * 100;
+    const seekTime = (x / rect.width) * video.duration;
+
+    if (isDragging) {
+      progressBar.style.width = `${percentage}%`;
+      currentTimeEl.textContent = formatTime(seekTime);
+    }
+    timeTooltip.style.left = `${x}px`;
+    timeTooltip.textContent = formatTime(seekTime);
+  }
+
+  video.addEventListener("timeupdate", () => {
+    if (!isDragging) {
+      const percentage = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = `${percentage}%`;
+      currentTimeEl.textContent = formatTime(video.currentTime);
+    }
+  });
+
+  video.addEventListener("loadedmetadata", () => {
+    durationEl.textContent = formatTime(video.duration);
+  });
+
+  progressArea.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    progressArea.classList.add("dragging");
+    handleMove(e);
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (isDragging) handleMove(e);
+    else {
+      const rect = progressArea.getBoundingClientRect();
+      if (e.clientY >= rect.top - 20 && e.clientY <= rect.bottom + 20 && 
+          e.clientX >= rect.left && e.clientX <= rect.right) {
+        handleMove(e);
+      }
+    }
+  });
+
+  window.addEventListener("mouseup", (e) => {
+    if (isDragging) {
+      const rect = progressArea.getBoundingClientRect();
+      let x = e.clientX - rect.left;
+      x = Math.max(0, Math.min(x, rect.width));
+      video.currentTime = (x / rect.width) * video.duration;
+      isDragging = false;
+      progressArea.classList.remove("dragging");
+    }
+  });
+
+  progressArea.addEventListener("touchstart", (e) => {
+    isDragging = true;
+    progressArea.classList.add("dragging");
+    handleMove(e);
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (e) => {
+    if (isDragging) handleMove(e);
+  }, { passive: true });
+
+  window.addEventListener("touchend", (e) => {
+    if (isDragging) {
+      const percentage = parseFloat(progressBar.style.width) / 100;
+      video.currentTime = percentage * video.duration;
+      isDragging = false;
+      progressArea.classList.remove("dragging");
+    }
+  });
+
+  volumeSlider.addEventListener("input", (e) => {
+    video.volume = e.target.value;
+    video.muted = video.volume === 0;
+    updateVolumeIcon();
+  });
+
+  muteBtn.addEventListener("click", () => {
+    video.muted = !video.muted;
+    updateVolumeIcon();
+  });
+
+  function updateVolumeIcon() {
+    if (video.muted || video.volume === 0) {
+      volumeIcon.style.display = "none";
+      muteIcon.style.display = "block";
+    } else {
+      volumeIcon.style.display = "block";
+      muteIcon.style.display = "none";
+    }
+  }
+
+  fullscreenBtn.addEventListener("click", () => {
+    if (!document.fullscreenElement) container.requestFullscreen();
+    else document.exitFullscreen();
+  });
+
+  container.addEventListener("touchstart", () => {
+    container.classList.add("touch-active");
+    clearTimeout(container.touchTimeout);
+    container.touchTimeout = setTimeout(() => container.classList.remove("touch-active"), 3000);
+  });
+</script>        
 
 <a href="index.html" class="back">← Quay lại</a>
 
